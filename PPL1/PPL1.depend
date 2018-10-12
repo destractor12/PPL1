@@ -13,3 +13,34 @@
 	<stdlib.h>
 	"Funciones.h"
 
+1539320012 source:c:\users\nico\desktop\ppl1-master\ppl1\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<string.h>
+	"automoviles.h"
+
+1539306646 c:\users\nico\desktop\ppl1-master\ppl1\funciones.h
+
+1539306511 source:c:\users\nico\desktop\ppl1-master\ppl1\main.c
+	<stdio.h>
+	<stdlib.h>
+	"automoviles.h"
+
+1539319361 source:c:\users\nico\desktop\ppl1-master\ppl1\automoviles.c
+	"automoviles.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+
+1539305777 c:\users\nico\desktop\ppl1-master\ppl1\automoviles.h
+	"Funciones.h"
+
+1539306745 source:c:\users\nico\desktop\ppl1-master\ppl1\egreso.c
+	"Egreso.h"
+
+1539306745 c:\users\nico\desktop\ppl1-master\ppl1\egreso.h
+	"automoviles.h"
+

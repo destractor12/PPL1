@@ -1,15 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <ctype.h>
 #include <string.h>
-#include "Funciones.h"
+#include "automoviles.h"
+
 
 int cargarHarcodePropietario(ePropietario listadoPropietario[],int tamanioPropietario)
 {
     char nombre[][20]= {"Juan","Luis","Maria","Jose"};
     char tarjeta[][20]= {"1111115115970359","2222223709842615","3333339846125430","4444449784621573"};
     char direccion[][20]= {"mitre","urquiza","belgrano","alsina"};
-    int id[]={18,35,15,29};
+    int id[]= {18,35,15,29};
     int i;
     for(i=0; i<4; i++)
     {
@@ -29,12 +30,12 @@ void agregarPersona(ePropietario listadoPropietario[],int len)
     indice=obtenerEspacioLibre(listadoPropietario, len);
     if(indice!=-1)
     {
-        getString("Ingrese el nombre y apellido de la persona ",listadoPropietario[indice].NombreyApellido);
+        getString("Ingrese el nombre y apellido de la persona: ",listadoPropietario[indice].NombreyApellido);
         stringToUpper(listadoPropietario[indice].NombreyApellido);
-        getString("Ingrese el nombre de la persona ",listadoPropietario[indice].Direccion);
+        getString("Ingrese la direccion de la persona: ",listadoPropietario[indice].Direccion);
         stringToUpper(listadoPropietario[indice].Direccion);
-        getString("Ingresa tarjeta de credito de la persona ",listadoPropietario[indice].tarjetadeCredito);
-        listadoPropietario[indice].IdPropietario=getInt("Ingresa el Id de la persona ",listadoPropietario[indice].IdPropietario);
+        getString("Ingresa tarjeta de credito de la persona: ",listadoPropietario[indice].tarjetadeCredito);
+        listadoPropietario[indice].IdPropietario=getInt("Ingresa el Id de la persona: ",listadoPropietario[indice].IdPropietario);
         listadoPropietario[indice].estado=1;
     }
     else
@@ -92,11 +93,12 @@ int mostrarMenu()
     printf("2. MODIFICAR\n");
     printf("3. BAJA\n");
     printf("4. INFORMAR\n");
-    printf("5. Salir\n");
+    printf("5. Alta automovil\n");
+    printf("9. Salir\n");
     printf("Ingrese una opcion: ");
     scanf("%d",&opcion);
 
-    opcion=validarEntero(opcion,"una opcion: ",1,5);
+    opcion=validarEntero(opcion,"una opcion: ",1,9);
 
     return opcion;
 
@@ -104,16 +106,16 @@ int mostrarMenu()
 
 int validarEntero(int numero,char texto[],int min,int max)
 {
-        while(numero<min || numero>max)
-        {
+    while(numero<min || numero>max)
+    {
 
-            printf("\nReingrese %s",texto);
-            scanf("%d",&numero);
-        }
-        return numero;
+        printf("\nReingrese %s",texto);
+        scanf("%d",&numero);
+    }
+    return numero;
 }
 
-char getString(char mensaje[], char caracter[])
+char getString(char mensaje[], char* caracter)
 {
 
     printf("%s",mensaje);
@@ -156,8 +158,20 @@ void stringToUpper(char caracter[])
             caracter[i]=toupper(caracter[i]);
         }
     }
-    return caracter;
 }
+
+char stringMayusculas(char cadena[])
+{
+    int largo;
+    largo=strlen(cadena);
+    int i;
+    for(i=0;i<largo;i++)
+    {
+        cadena[i]=toupper(cadena[i]);
+    }
+    return cadena;
+}
+
 
 void borrarPersona(ePropietario listadoPropietario[],int flag, int len)
 {
@@ -170,7 +184,7 @@ void borrarPersona(ePropietario listadoPropietario[],int flag, int len)
         printf("\n¿Que persona queres borrar? (Ingresar ID) ");
         scanf("%d",&id);
         fflush(stdin);
-        indice=buscarPorIdPropietario(listadoPropietario,id,len);
+        indice=buscarPorIdPropietario(listadoPropietario,len,id);
         caracter=deseaContinuar("Desea realizar esta modificacion? (S/N) ");
         if(indice!=-1&& caracter=='s')
         {
@@ -178,7 +192,7 @@ void borrarPersona(ePropietario listadoPropietario[],int flag, int len)
             listadoPropietario[indice].IdPropietario=0;
             strcpy(listadoPropietario[indice].NombreyApellido,"");
             strcpy(listadoPropietario[indice].Direccion,"");
-            listadoPropietario[indice].tarjetadeCredito,"";
+            strcpy(listadoPropietario[indice].tarjetadeCredito,"");
         }
         else if(caracter=='n')
         {
@@ -214,7 +228,7 @@ void modificarPropietario(ePropietario listadoPropietario[],int len,int flag)
     if(flag==1)
     {
         fflush(stdin);
-        int Id;
+        int Id=0;
         int indice;
         char caracter;
         char auxiliar[20];
@@ -245,12 +259,13 @@ void validarTarjetaDeCredito(char tarjeta[])
     int largo;
     largo=strlen(tarjeta);
     int i;
-    for(i=0;i<16;i++)
+    for(i=0; i<16; i++)
     {
-        while(largo!=16&&tarjeta[i]>0)
+        while(largo!=16 && tarjeta[i]>='0' && tarjeta[i]<='9')
         {
             getString("\nTarjeta ingrsada invalida. Los digitos ingresados deben ser mayores a 0 y no se deben ingresar letras. Ingresela nuevamente ",tarjeta);
             largo=strlen(tarjeta);
+            i=0;
         }
     }
 }
@@ -261,7 +276,7 @@ int validarStringEntero(char datoAValidar[])
     int validar;
     validar=strlen(datoAValidar);
     int i;
-    for(i=0;i<validar;)
+    for(i=0; i<validar;)
     {
         if(isdigit(datoAValidar[i])==0||datoAValidar[i]==' ')
         {
@@ -283,7 +298,7 @@ int validarStringEntero(char datoAValidar[])
     return A;
 }
 
-char validarStringCadena(char datoAValidar[])
+char* validarStringCadena(char datoAValidar[])
 {
     int validar;
     validar=strlen(datoAValidar);
@@ -295,7 +310,7 @@ char validarStringCadena(char datoAValidar[])
         validar=strlen(datoAValidar);
     }
     int i;
-    for(i=0;i<validar;)
+    for(i=0; i<validar;)
     {
         if(isalpha(datoAValidar[i])==0&&datoAValidar[i]!=' ')
         {
@@ -328,13 +343,58 @@ char validarStringCadena(char datoAValidar[])
     return datoAValidar;
 }
 
+/*char* validarStringCadena(char datoAValidar[])
+{
+    int validar;
+    validar=strlen(datoAValidar);
+    while(validar==0)
+    {
+        printf("\nLa palabra ingresada no es valida. Ingresela nuevamente ");
+        gets(datoAValidar);
+        fflush(stdin);
+        validar=strlen(datoAValidar);
+    }
+    int i;
+    for(i=0; i<validar;)
+    {
+        if(isalpha(datoAValidar[i])==0&&datoAValidar[i]!=' ')
+        {
+            do
+            {
+                printf("\nIngresa una palabra valida ");
+                gets(datoAValidar);
+                validar=strlen(datoAValidar);
+                fflush(stdin);
+            }
+            while(isalpha(datoAValidar[i])==0);
+        }
+        else if(datoAValidar[0]== ' ')
+        {
+            do
+            {
+                printf("\nIngresa una palabra valida ");
+                gets(datoAValidar);
+                validar=strlen(datoAValidar);
+                fflush(stdin);
+            }
+            while(datoAValidar[0]==' ');
+        }
+        else
+        {
+            i=i+1;
+        }
+
+    }
+    return datoAValidar;
+}*/
+
 char deseaContinuar(char mensaje[])
 {
     char seguir;
     do
     {
         seguir=getChar(mensaje,seguir);
-        tolower(seguir);
+        seguir=tolower(seguir);
         fflush(stdin);
     }
     while(seguir!='s'&&seguir!='n');
@@ -345,20 +405,21 @@ void mostrarListaPropietario(ePropietario listadoPropietario[],int len,int flag)
 {
     if(flag==1)
     {
-        printf("ID\tNombre\t\t\tTarjeta de credito\tDireccion\tID\n");
+        printf("ID\tNombre\t\t\tTarjeta de credito\t\tDireccion\n");
         int i;
         int largo;
         for(i=0; i<len; i++)
         {
             if(listadoPropietario[i].estado==1)
             {
+                ordenarPropietarios(listadoPropietario, len);
                 printf("%d\t%s",listadoPropietario[i].IdPropietario,listadoPropietario[i].NombreyApellido);
                 largo=strlen(listadoPropietario[i].NombreyApellido);
                 if(largo<16)
                 {
                     printf("\t");
                 }
-                printf("\t\t%s\t\t\t%s\n",listadoPropietario[i].tarjetadeCredito,listadoPropietario[i].Direccion);
+                printf("\t\t%s\t\t\%s\n",listadoPropietario[i].tarjetadeCredito,listadoPropietario[i].Direccion);
             }
 
         }
@@ -367,5 +428,36 @@ void mostrarListaPropietario(ePropietario listadoPropietario[],int len,int flag)
     {
         printf("\nNo es posible mostrar propietarios porque no hay ninguno ingresado\n");
     }
+
+}
+
+/*void mostrarPropietarioPorNombre(ePropietario listadoPropietario[],int tamPropietario)
+{
+    ordenarPropietarios(listadoPropietario,tamPropietario);
+}*/
+
+void ordenarPropietarios(ePropietario listadoPropietario[],int tamPropietario)
+{
+    ePropietario aux;
+    int i;
+    int j;
+    for(i=0; i<tamPropietario-1; i++)
+    {
+        if(listadoPropietario[i].estado==1)
+        {
+            for(j=i+1; j<tamPropietario; j++)
+            {
+                if(listadoPropietario[j].estado==1&&strcmp(listadoPropietario[i].NombreyApellido,listadoPropietario[j].NombreyApellido)>0)
+                {
+                    aux=listadoPropietario[i];
+                    listadoPropietario[i]=listadoPropietario[j];
+                    listadoPropietario[j]=aux;
+                }
+            }
+
+        }
+
+    }
+
 
 }

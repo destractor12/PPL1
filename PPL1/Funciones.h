@@ -10,7 +10,7 @@ typedef struct
 }ePropietario;
 
 void agregarPersona(ePropietario[],int);
-char getString(char[], char[]);
+char getString(char[], char*);
 void stringToUpper(char[]);
 int buscarPorIdPropietario(ePropietario[],int,int);
 int getInt(char[],int);
@@ -21,8 +21,13 @@ void borrarPersona(ePropietario[],int, int);
 void validarTarjetaDeCredito(char[]);
 char deseaContinuar(char[]);
 char getChar(char[],char);
-char validarStringCadena(char[]);
+char* validarStringCadena(char[]);
+int validarStringEntero(char[]);
 void modificarPropietario(ePropietario[],int,int);
 void mostrarLista(ePropietario[],int);
 int cargarHarcodePropietario(ePropietario[],int);
 void mostrarListaPropietario(ePropietario[],int,int);
+int validarEntero(int,char[],int,int );
+void mostrarPropietarioPorNombre(ePropietario[],int);
+void ordenarPropietarios(ePropietario[],int);
+char stringMayusculas(char[]);
